@@ -135,8 +135,11 @@ hardware_interface::return_type DiffDriveArduino::write()
   {
     return return_type::ERROR;
   }
+  
+  int motor_l_counts_per_loop = l_wheel_.cmd / l_wheel_.rads_per_count / cfg_.loop_rate;
+  int motor_r_counts_per_loop = r_wheel_.cmd / r_wheel_.rads_per_count / cfg_.loop_rate; 
 
-  arduino_.setMotorValues(l_wheel_.cmd / l_wheel_.rads_per_count / cfg_.loop_rate, r_wheel_.cmd / r_wheel_.rads_per_count / cfg_.loop_rate);
+  arduino_.setMotorValues(motor_r_counts_per_loop, motor_l_counts_per_loop);
 
 
 
@@ -146,7 +149,6 @@ hardware_interface::return_type DiffDriveArduino::write()
 
   
 }
-
 
 
 #include "pluginlib/class_list_macros.hpp"
