@@ -98,10 +98,10 @@ def generate_launch_description():
 
     # Launch them all!
     return LaunchDescription([
-        node_robot_state_publisher,
+        # node_robot_state_publisher,
         robot_localization_node,
-        diff_drive_spawner,
-        joint_broad_spawner,
-        delayed_controller_manager,
+        # diff_drive_spawner,
+        # joint_broad_spawner,
+        # delayed_controller_manager,
         delay_rviz_after_joint_state_broadcaster_spawner
     ])
