@@ -14,7 +14,7 @@ diff_cont:
 
     publish_rate: 30.0
 
-    base_frame_id: base_link
+    base_frame_id: base_footprint
 
     left_wheel_names: ['left_wheel_joint']
     right_wheel_names: ['right_wheel_joint']
@@ -22,7 +22,7 @@ diff_cont:
     wheel_radius: 0.15
 
     use_stamped_vel: false
-    enable_odom_tf: true
+    enable_odom_tf: false
     open_loop: false    
 
     wheels_per_side: 1
