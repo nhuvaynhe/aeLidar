@@ -3,7 +3,7 @@ ekf_filter_node:
     ros__parameters:
         frequency: 30.0
 
-        two_d_mode: false
+        two_d_mode: true
 
 # Whether to publish the acceleration state. Defaults to false if unspecified.
         publish_acceleration: true
