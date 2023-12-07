@@ -81,26 +81,26 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
-    # delayed_joint_broad_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessStart(
-    #         target_action=controller_manager,
-    #         on_start=[joint_broad_spawner],
-    #     )
-    # )
+    delayed_joint_broad_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[joint_broad_spawner],
+        )
+    )
 
     # Delay rviz start after `joint_state_broadcaster`
-    robot_localization_node = RegisterEventHandler(
+    delayed_robot_localization_node = RegisterEventHandler(
         event_handler=OnProcessStart(
-            target_action=delayed_controller_manager,
-            on_start=[rviz_node],
+            target_action=robot_localization_node,
+            on_start=[delayed_controller_manager],
         )
     )
 
     # Launch them all!
     return LaunchDescription([
         node_robot_state_publisher,
-        diff_drive_spawner,
-        joint_broad_spawner,
         delayed_controller_manager,
-        robot_localization_node,
+        delayed_diff_drive_spawner,
+        delayed_joint_broad_spawner,
+        delayed_robot_localization_node,
     ])
