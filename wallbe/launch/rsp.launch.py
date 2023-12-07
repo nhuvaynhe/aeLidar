@@ -89,18 +89,18 @@ def generate_launch_description():
     # )
 
     # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_broad_spawner,
-            on_exit=[rviz_node],
+    robot_localization_node = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=delayed_controller_manager,
+            on_start=[rviz_node],
         )
     )
 
     # Launch them all!
     return LaunchDescription([
-        robot_localization_node,
         node_robot_state_publisher,
         diff_drive_spawner,
         joint_broad_spawner,
         delayed_controller_manager,
+        robot_localization_node,
     ])

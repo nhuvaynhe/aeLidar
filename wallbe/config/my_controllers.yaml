@@ -1,7 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 30
-    # use_sim_time: true
+    use_sim_time: false
 
     diff_cont:
       type: diff_drive_controller/DiffDriveController
@@ -33,9 +33,6 @@ diff_cont:
     # odom_frame_id: x
     # pose_covariance_diagonal: x
     # twist_covariance_diagonal: x
-    # open_loop: x
-    # enable_odom_tf: x
-
     # cmd_vel_timeout: x
     # publish_limited_velocity: x
     # velocity_rolling_window_size: x
