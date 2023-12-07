@@ -422,7 +422,7 @@ public:
     int udp_port = 8089;
     int serial_baudrate = 115200;
     std::string frame_id;
-    bool inverted = false;
+    bool inverted = true;
     bool angle_compensate = true;
     float max_distance = 8.0;
     size_t angle_compensate_multiple = 1;//it stand of angle compensate at per 1 degree
