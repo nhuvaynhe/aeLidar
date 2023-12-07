@@ -98,6 +98,7 @@ def generate_launch_description():
 
     # Launch them all!
     return LaunchDescription([
+        robot_localization_node,
         node_robot_state_publisher,
         diff_drive_spawner,
         joint_broad_spawner,
