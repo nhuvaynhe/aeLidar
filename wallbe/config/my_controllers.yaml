@@ -22,7 +22,7 @@ diff_cont:
     wheel_radius: 0.15
 
     use_stamped_vel: false
-    enable_odom_tf: false
+    enable_odom_tf: true
     open_loop: false    
 
     wheels_per_side: 1
