@@ -79,7 +79,7 @@ return_type DiffDriveArduino::start()
   arduino_.sendEmptyMsg();
   // arduino.setPidValues(9,7,0,100);
   // arduino.setPidValues(14,7,0,100);
-  arduino_.setPidValues(30, 20, 0, 100);
+  arduino_.setPidValues(20, 12, 0, 50);
 
   status_ = hardware_interface::status::STARTED;
 
@@ -111,7 +111,7 @@ hardware_interface::return_type DiffDriveArduino::read()
     return return_type::ERROR;
   }
 
-  arduino_.readEncoderValues(l_wheel_.enc, r_wheel_.enc);
+  arduino_.readEncoderValues(r_wheel_.enc, l_wheel_.enc);
 
   double pos_prev = l_wheel_.pos;
   l_wheel_.pos = l_wheel_.calcEncAngle();

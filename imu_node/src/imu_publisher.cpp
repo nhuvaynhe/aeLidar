@@ -47,7 +47,7 @@ bool XsensPublisher::scanForBluetoothDevices()
 {
     if (!xdpcHandler.initialize())
     {
-        cout << "Failed to initialize XdpcHandler." << endl;
+        cout << "[imu] Failed to initialize XdpcHandler." << endl;
         return false;
     }
 
@@ -55,7 +55,7 @@ bool XsensPublisher::scanForBluetoothDevices()
 
     if (xdpcHandler.detectedDots().empty())
     {
-        cout << "No Movella DOT device(s) found." << endl;
+        cout << "[imu] No Movella DOT device(s) found." << endl;
         xdpcHandler.cleanup();
         return false;
     }
@@ -64,22 +64,22 @@ bool XsensPublisher::scanForBluetoothDevices()
 
     if (xdpcHandler.connectedDots().empty())
     {
-        cout << "Could not connect to any Movella DOT device(s). Aborting." << endl;
+        cout << "[imu] Could not connect to any Movella DOT device(s). Aborting." << endl;
         xdpcHandler.cleanup();
         return false;
     }
 
     for (auto const& device : xdpcHandler.connectedDots())
     {
-        cout << "Set recording data rate to 30 Hz" << endl;
+        cout << "[imu] Set recording data rate to 30 Hz" << endl;
         if (device->setOutputRate(30))
-            cout << "Successfully set recording rate to 30Hz" << endl;
+            cout << "[imu] Successfully set recording rate to 30Hz" << endl;
         else
-            cout << "Setting recording rate failed!" << endl;
+            cout << "[imu] Setting recording rate failed!" << endl;
 
         if (!device->startMeasurement(XsPayloadMode::RateQuantities))
         {
-            cout << "Could not put device into measurement mode. Reason: " << device->lastResultText() << endl;
+            cout << "[imu] Could not put device into measurement mode. Reason: " << device->lastResultText() << endl;
             continue;
             return false;
         }
@@ -106,11 +106,11 @@ void XsensPublisher::GetData()
                 {
                     for (auto const& device : xdpcHandler.connectedDots())
                     {
-                        cout << endl << "Resetting heading for device " << device->bluetoothAddress() << ": ";
+                        cout << endl << "[imu] Resetting heading for device " << device->bluetoothAddress() << ": ";
                         if (device->resetOrientation(XRM_Heading))
-                            cout << "OK";
+                            cout << "[imu] OK";
                         else
-                            cout << "NOK: " << device->lastResultText();
+                            cout << "[imu] NOK: " << device->lastResultText();
                     }
                     cout << endl;
                     orientationResetDone = true;
@@ -118,7 +118,7 @@ void XsensPublisher::GetData()
 
                 auto imu_msgs = sensor_msgs::msg::Imu();
                 imu_msgs.header.stamp = this->get_clock()->now();
-                imu_msgs.header.frame_id = 'base_link';
+                imu_msgs.header.frame_id = 'base_footprint';
 
                 if (packet.containsCalibratedAcceleration())
                 {
@@ -158,11 +158,11 @@ void XsensPublisher::GetData()
     }
     cout << endl;
 
-    cout << "Stopping measurement..." << endl;
+    cout << "[imu] Stopping measurement..." << endl;
     for (auto device : xdpcHandler.connectedDots())
     {
         if (!device->stopMeasurement())
-             cout << "Failed to stop measurement.";
+             cout << "[imu] Failed to stop measurement.";
     }
     xdpcHandler.cleanup();
     rclcpp::shutdown();
