@@ -24,7 +24,6 @@ def generate_launch_description():
     controller_params_file = os.path.join(get_package_share_directory(package_name),'config','my_controllers.yaml')
     
     ekf_config = os.path.join(pkg_path,'config','ekf_fusion.yaml')
-    rviz_config_file = os.path.join(pkg_path,'rviz','wallbe.rviz')
 
     # Create a robot_state_publisher node
     params = {'robot_description': robot_description_config}
@@ -72,14 +71,6 @@ def generate_launch_description():
         executable="spawner.py",
         arguments=["joint_broad"],
     )
-    
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-    )
 
     delayed_joint_broad_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -92,7 +83,7 @@ def generate_launch_description():
     delayed_robot_localization_node = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=robot_localization_node,
-            on_start=[delayed_controller_manager],
+            on_start=[diff_drive_spawner],
         )
     )
 
@@ -102,5 +93,4 @@ def generate_launch_description():
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
-        delayed_robot_localization_node,
     ])
