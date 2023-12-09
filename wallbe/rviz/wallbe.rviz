@@ -5,11 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Status1
         - /RobotModel1
-        - /TF1
-        - /TF1/Frames1
-        - /TF1/Tree1
-        - /TF1/Tree1/map1
+        - /Map1
+        - /Map1/Status1
       Splitter Ratio: 0.5
     Tree Height: 1307
   - Class: rviz_common/Selection
@@ -102,6 +101,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        lidar_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         right_motor:
           Alpha: 1
           Show Axes: false
@@ -117,63 +121,6 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Class: rviz_default_plugins/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: false
-        base_footprint:
-          Value: false
-        base_link:
-          Value: false
-        caster_frontal_wheel:
-          Value: true
-        chassis:
-          Value: false
-        hub:
-          Value: false
-        imu_frame:
-          Value: false
-        left_motor:
-          Value: true
-        left_wheel:
-          Value: true
-        map:
-          Value: true
-        odom:
-          Value: true
-        right_motor:
-          Value: true
-        right_wheel:
-          Value: true
-      Marker Scale: 1
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: false
-      Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                caster_frontal_wheel:
-                  {}
-                chassis:
-                  {}
-                hub:
-                  {}
-                imu_frame:
-                  {}
-                left_motor:
-                  {}
-                left_wheel:
-                  {}
-                right_motor:
-                  {}
-                right_wheel:
-                  {}
-      Update Interval: 0
-      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -191,12 +138,12 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 15
       Min Color: 0; 0; 0
-      Min Intensity: 8
+      Min Intensity: 7
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.029999999329447746
+      Size (m): 0.009999999776482582
       Style: Flat Squares
       Topic:
         Depth: 5
@@ -230,7 +177,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -270,7 +217,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 10.680437088012695
+      Distance: 4.507057189941406
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -285,10 +232,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.8947980403900146
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.005408171564340591
+      Yaw: 5.268586158752441
     Saved: ~
 Window Geometry:
   Displays:

@@ -6,7 +6,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command
+from launch.substitutions import Command, LaunchConfiguration
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessStart, OnProcessExit
 
@@ -16,6 +16,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     package_name='wallbe' #<--- CHANGE ME
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     # Process the URDF file
     pkg_path = os.path.join(get_package_share_directory('wallbe'))
@@ -26,7 +27,7 @@ def generate_launch_description():
     ekf_config = os.path.join(pkg_path,'config','ekf_fusion.yaml')
 
     # Create a robot_state_publisher node
-    params = {'robot_description': robot_description_config}
+    params = {'robot_description': robot_description_config, 'use_sim_time': use_sim_time}
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',

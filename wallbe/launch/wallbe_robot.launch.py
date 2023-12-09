@@ -6,7 +6,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command
+from launch.substitutions import Command, LaunchConfiguration
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessStart, OnProcessExit
 
@@ -16,6 +16,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     package_name='wallbe' #<--- CHANGE ME
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     # Process the URDF file
     pkg_path = os.path.join(get_package_share_directory('wallbe'))
@@ -23,7 +24,9 @@ def generate_launch_description():
     robot_description_config = Command(['xacro ', xacro_file])
     controller_params_file = os.path.join(get_package_share_directory(package_name),'config','my_controllers.yaml')
     
-    ekf_config = os.path.join(pkg_path,'config','ekf_fusion.yaml')
+    ekf_config = os.path.join(pkg_path,'config','ekf.yaml')
+    slam_config = os.path.join(pkg_path,'config','mapper_params_online_async.yaml.yaml')
+
     rviz_config_file = os.path.join(pkg_path,'rviz','wallbe.rviz')
 
     # Create a robot_state_publisher node
@@ -32,7 +35,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[params]
+        parameters=[params, {'use_sim_time': use_sim_time}]
     )
 
     robot_localization_node = Node(
@@ -96,6 +99,25 @@ def generate_launch_description():
         )
     )
 
+    start_async_slam_toolbox_node = Node(
+        parameters=[
+          slam_config,
+          {'use_sim_time': use_sim_time}
+        ],
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen'
+    )
+
+    # Delay rviz start after `joint_state_broadcaster`
+    delay_slam_after_robot_localization = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=robot_localization_node,
+            on_start=[start_async_slam_toolbox_node],
+        )
+    )
+
     # Launch them all!
     return LaunchDescription([
         # node_robot_state_publisher,
@@ -103,5 +125,6 @@ def generate_launch_description():
         # diff_drive_spawner,
         # joint_broad_spawner,
         # delayed_controller_manager,
-        delay_rviz_after_robot_localization_node
+        delay_rviz_after_robot_localization_node,
+        delay_slam_after_robot_localization
     ])
