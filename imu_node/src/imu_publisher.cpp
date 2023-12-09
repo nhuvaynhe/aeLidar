@@ -108,9 +108,9 @@ void XsensPublisher::GetData()
                     {
                         cout << endl << "[imu] Resetting heading for device " << device->bluetoothAddress() << ": ";
                         if (device->resetOrientation(XRM_Heading))
-                            cout << "[imu] OK";
+                            cout << " OK";
                         else
-                            cout << "[imu] NOK: " << device->lastResultText();
+                            cout << " NOK: " << device->lastResultText();
                     }
                     cout << endl;
                     orientationResetDone = true;
@@ -129,6 +129,8 @@ void XsensPublisher::GetData()
 
                     // Copy the XsReal data to the float vector.
                     copy(Acceleration.data(), Acceleration.data() + 3, accel_arr.data());
+                    
+                    
 
                     imu_msgs.linear_acceleration.x = accel_arr[0];
                     imu_msgs.linear_acceleration.y = accel_arr[1];
@@ -145,9 +147,20 @@ void XsensPublisher::GetData()
                     // Copy the XsReal data to the float vector.
                     copy(AngularVelocity.data(), AngularVelocity.data() + 3, float_array.data());
 
-                    imu_msgs.angular_velocity.x = deg_to_rad(float_array[0]);
-                    imu_msgs.angular_velocity.y = deg_to_rad(float_array[1]);
-                    imu_msgs.angular_velocity.z = deg_to_rad(float_array[2]);
+                    float w_x = deg_to_rad(float_array[0]);
+                    float w_y = deg_to_rad(float_array[1]);
+                    float w_z = deg_to_rad(float_array[2]);
+
+                    if ((w_z > -0.004) && (w_z < 0.004))
+                        w_z = 0;
+                    if ((w_y > -0.03) && (w_y < 0.03))
+                        w_y = 0;
+                    if ((w_x > -0.05) && (w_x < 0.05))
+                        w_x = 0;
+
+                    imu_msgs.angular_velocity.x = w_x;
+                    imu_msgs.angular_velocity.y = w_y;
+                    imu_msgs.angular_velocity.z = w_z;
                 }
 
                 publisher_->publish(imu_msgs);
