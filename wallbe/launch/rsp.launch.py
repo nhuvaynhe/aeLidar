@@ -31,7 +31,10 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[params]
+        parameters=[params],
+        remappings=[
+            ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ],
     )
 
     robot_localization_node = Node(
@@ -56,7 +59,7 @@ def generate_launch_description():
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["diff_cont"],
+        arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
     )
 
     delayed_diff_drive_spawner = RegisterEventHandler(
@@ -69,7 +72,7 @@ def generate_launch_description():
     joint_broad_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_broad"],
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     delayed_joint_broad_spawner = RegisterEventHandler(

@@ -16,7 +16,7 @@ diff_controller:
     wheels_per_side: 1
     wheel_separation: 0.24
     wheel_radius: 0.15
-    base_frame_id: base_link
+    base_frame_id: base_footprint
     use_stamped_vel: false
 
     linear.x.has_velocity_limits: false
